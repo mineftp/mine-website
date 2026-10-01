@@ -2,50 +2,29 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const multer = require('multer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const serverless = require('serverless-http');
-
-// Cloudinary
 const cloudinary = require('cloudinary').v2;
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
-
-// DB Setup
 const { connectDB, User, Product } = require('./db');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 const SECRET_KEY = process.env.JWT_SECRET || 'mine_super_secret_key';
 
-// Initialize MongoDB
 connectDB();
 
 app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public'))); // Serve frontend locally
+// Mengizinkan pengiriman foto dalam bentuk teks (Base64) hingga 10MB
+app.use(express.json({ limit: '10mb' })); 
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// --- CLOUDINARY CONFIG ---
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'mine_products',
-    allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
-  }
-});
-
-// Fallback to memory storage if Cloudinary is not configured (prevents crashing if testing locally without keys)
-const upload = process.env.CLOUDINARY_CLOUD_NAME 
-    ? multer({ storage }) 
-    : multer({ storage: multer.memoryStorage() });
-
-// --- AUTHENTICATION MIDDLEWARE ---
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -58,7 +37,6 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-// --- AUTH ENDPOINTS ---
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
     try {
@@ -77,7 +55,6 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// --- PRODUCT ENDPOINTS ---
 app.get('/api/products', async (req, res) => {
     try {
         const products = await Product.find();
@@ -87,15 +64,15 @@ app.get('/api/products', async (req, res) => {
     }
 });
 
-app.post('/api/products', authenticateToken, upload.single('image'), async (req, res) => {
+app.post('/api/products', authenticateToken, async (req, res) => {
     try {
-        const { name, price, weight, category, stock } = req.body;
+        const { name, price, weight, category, stock, imageBase64 } = req.body;
         
-        // If Cloudinary is configured, file.path contains the cloud URL. 
-        // If not configured, we just use a placeholder for now.
         let imgUrl = 'images/placeholder.jpg';
-        if (req.file && req.file.path) {
-            imgUrl = req.file.path;
+        // Upload Base64 ke Cloudinary
+        if (imageBase64) {
+            const uploadRes = await cloudinary.uploader.upload(imageBase64, { folder: 'mine_products' });
+            imgUrl = uploadRes.secure_url;
         }
 
         const product = await Product.create({
@@ -127,13 +104,4 @@ app.delete('/api/products/:id', authenticateToken, async (req, res) => {
     }
 });
 
-// Start local server if not running in serverless environment
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
-    });
-}
-
-// Export for serverless platforms (Vercel/Netlify)
-module.exports = app;
 module.exports.handler = serverless(app);
