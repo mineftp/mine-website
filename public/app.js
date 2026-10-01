@@ -5,10 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const stepEmail = document.getElementById('step-email');
     const stepPassword = document.getElementById('step-password');
     const gateScreen = document.getElementById('gate-screen');
+    const mainContent = document.getElementById('main-content'); // Ini yang kemarin terlupa!
 
     if (emailForm) {
         emailForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Mencegah halaman reload
+            e.preventDefault();
             stepEmail.classList.remove('active');
             stepPassword.classList.add('active');
         });
@@ -20,9 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const pwd = document.getElementById('password-input').value;
             if (pwd === 'MINE2026') {
                 gateScreen.style.opacity = '0';
-                setTimeout(() => { gateScreen.style.display = 'none'; }, 500);
+                setTimeout(() => { 
+                    gateScreen.style.display = 'none'; 
+                    mainContent.classList.remove('hidden'); // Ini perintah memunculkan toko!
+                }, 500);
             } else {
-                alert('Incorrect Password!');
+                alert('Password Salah!');
             }
         });
     }
@@ -187,6 +191,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Jalankan pengambilan produk saat web dimuat
     loadProducts();
 });
