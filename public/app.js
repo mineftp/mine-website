@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
         
-        if (cartNavBtn) cartNavBtn.textContent = \`CART (\${totalItems})\`;
+        if (cartNavBtn) cartNavBtn.textContent = 'CART (' + totalItems + ')';
 
         if (!cartItems) return;
         cartItems.innerHTML = '';
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             cartItems.appendChild(row);
         });
-        if (cartTotalPrice) cartTotalPrice.textContent = \`$\${total}\`;
+        if (cartTotalPrice) cartTotalPrice.textContent = '$' + total;
     };
 
     // --- 4. SISTEM KLIK LACI KERANJANG ---
@@ -226,58 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (closeCartBtn) closeCartBtn.addEventListener('click', closeDrawer);
     if (cartOverlay) cartOverlay.addEventListener('click', closeDrawer);
 
-    // --- 5. MENU AKUN & PENGISIAN CHECKOUT OTOMATIS ---
-    const accountModal = document.getElementById('account-modal');
-    document.querySelectorAll('.nav-right a').forEach(a => {
-        if(a.textContent.includes('ACCOUNT')) {
-            a.addEventListener('click', (e) => {
-                e.preventDefault();
-                accountModal.classList.remove('hidden');
-                
-                // Isi formulir dari data yang tersimpan sebelumnya
-                document.getElementById('acc-name').value = localStorage.getItem('mine_acc_name') || '';
-                document.getElementById('acc-address').value = localStorage.getItem('mine_acc_addr') || '';
-                document.getElementById('acc-phone').value = localStorage.getItem('mine_acc_phone') || '';
-            });
-        }
-    });
-
-    document.getElementById('close-account-modal').onclick = () => accountModal.classList.add('hidden');
-
-    document.getElementById('account-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        localStorage.setItem('mine_acc_name', document.getElementById('acc-name').value);
-        localStorage.setItem('mine_acc_addr', document.getElementById('acc-address').value);
-        localStorage.setItem('mine_acc_phone', document.getElementById('acc-phone').value);
-        alert('Data berhasil disimpan! Sistem akan otomatis mengisi form pengiriman Anda saat Checkout.');
-        accountModal.classList.add('hidden');
-    });
-
-    // Menangani tombol Checkout
-    const btnCheckout = document.getElementById('btn-checkout');
-    const checkoutModal = document.getElementById('checkout-modal');
-    const closeCheckout = document.getElementById('close-checkout');
-
-    if (btnCheckout && checkoutModal) {
-        btnCheckout.addEventListener('click', () => {
-            if (cart.length === 0) return alert('Keranjang masih kosong!');
-            
-            // Pengisian otomatis
-            const checkoutInputs = checkoutModal.querySelectorAll('input');
-            if(checkoutInputs.length > 0) {
-                if(checkoutInputs[0]) checkoutInputs[0].value = localStorage.getItem('mine_acc_name') || '';
-                if(checkoutInputs.length > 1) checkoutInputs[1].value = localStorage.getItem('mine_acc_addr') || '';
-            }
-
-            closeDrawer();
-            checkoutModal.classList.remove('hidden');
-        });
-    }
-    if (closeCheckout) {
-        closeCheckout.addEventListener('click', () => checkoutModal.classList.add('hidden'));
-    }
-
-    // --- 6. FILTER KATEGORI ---
+    // --- 5. FILTER KATEGORI ---
     function setupFilterLogic() {
         const catItems = document.querySelectorAll('.cat-item');
         const productCards = document.querySelectorAll('.product-card');
@@ -298,6 +247,54 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         });
+    }
+
+    // --- 6. MENU AKUN & PENGISIAN CHECKOUT OTOMATIS ---
+    const accountModal = document.getElementById('account-modal');
+    document.querySelectorAll('.nav-right a').forEach(a => {
+        if(a.textContent.includes('ACCOUNT')) {
+            a.addEventListener('click', (e) => {
+                e.preventDefault();
+                accountModal.classList.remove('hidden');
+                
+                document.getElementById('acc-name').value = localStorage.getItem('mine_acc_name') || '';
+                document.getElementById('acc-address').value = localStorage.getItem('mine_acc_addr') || '';
+                document.getElementById('acc-phone').value = localStorage.getItem('mine_acc_phone') || '';
+            });
+        }
+    });
+
+    document.getElementById('close-account-modal').onclick = () => accountModal.classList.add('hidden');
+
+    document.getElementById('account-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        localStorage.setItem('mine_acc_name', document.getElementById('acc-name').value);
+        localStorage.setItem('mine_acc_addr', document.getElementById('acc-address').value);
+        localStorage.setItem('mine_acc_phone', document.getElementById('acc-phone').value);
+        alert('Data berhasil disimpan! Sistem akan otomatis mengisi form pengiriman Anda saat Checkout.');
+        accountModal.classList.add('hidden');
+    });
+
+    const btnCheckout = document.getElementById('btn-checkout');
+    const checkoutModal = document.getElementById('checkout-modal');
+    const closeCheckout = document.getElementById('close-checkout');
+
+    if (btnCheckout && checkoutModal) {
+        btnCheckout.addEventListener('click', () => {
+            if (cart.length === 0) return alert('Keranjang masih kosong!');
+            
+            const checkoutInputs = checkoutModal.querySelectorAll('input');
+            if(checkoutInputs.length > 0) {
+                if(checkoutInputs[0]) checkoutInputs[0].value = localStorage.getItem('mine_acc_name') || '';
+                if(checkoutInputs.length > 1) checkoutInputs[1].value = localStorage.getItem('mine_acc_addr') || '';
+            }
+
+            closeDrawer();
+            checkoutModal.classList.remove('hidden');
+        });
+    }
+    if (closeCheckout) {
+        closeCheckout.addEventListener('click', () => checkoutModal.classList.add('hidden'));
     }
 
     // Mulai Muat Produk
