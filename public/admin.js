@@ -101,32 +101,51 @@ document.addEventListener('DOMContentLoaded', () => {
         productForm.reset();
     });
 
-    productForm.addEventListener('submit', async (e) => {
+        productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        const formData = new FormData();
-        formData.append('name', document.getElementById('prod-name').value);
-        formData.append('price', document.getElementById('prod-price').value);
-        formData.append('stock', document.getElementById('prod-stock').value);
-        formData.append('weight', document.getElementById('prod-weight').value);
-        formData.append('category', document.getElementById('prod-category').value);
-        formData.append('image', document.getElementById('prod-image').files[0]);
+        const file = document.getElementById('prod-image').files[0];
+        
+        const payload = {
+            name: document.getElementById('prod-name').value,
+            price: document.getElementById('prod-price').value,
+            stock: document.getElementById('prod-stock').value,
+            weight: document.getElementById('prod-weight').value,
+            category: document.getElementById('prod-category').value,
+            imageBase64: ''
+        };
 
-        try {
-            const res = await fetch('/api/products', {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` },
-                body: formData
-            });
-            if (res.ok) {
-                addProductForm.classList.remove('active');
-                productForm.reset();
-                fetchProducts();
-            } else {
-                alert('Error adding product');
+        const uploadProduct = async (data) => {
+            try {
+                const res = await fetch('/api/products', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` 
+                    },
+                    body: JSON.stringify(data)
+                });
+                if (res.ok) {
+                    addProductForm.classList.remove('active');
+                    productForm.reset();
+                    fetchProducts();
+                } else {
+                    alert('Error adding product (Pastikan ukuran file foto tidak lebih dari 5MB)');
+                }
+            } catch (err) {
+                console.error(err);
             }
-        } catch (err) {
-            console.error(err);
+        };
+
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                payload.imageBase64 = reader.result;
+                uploadProduct(payload);
+            };
+        } else {
+            uploadProduct(payload);
         }
     });
 
