@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MINE | Official Store</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- GATE SCREEN: Email & Password -->
+    <div id="gate-screen" class="active">
+        <div class="gate-content">
+            <h1 class="brand-logo">MINE</h1>
+            <p class="gate-subtitle">EXCLUSIVE ACCESS ONLY.</p>
+            
+            <div id="step-email" class="step-container active">
+                <p class="instruction">Enter your email to receive the access password.</p>
+                <form id="email-form">
+                    <input type="email" id="email-input" placeholder="EMAIL ADDRESS" required>
+                    <button type="submit" class="btn">SUBMIT</button>
+                </form>
+            </div>
+
+            <div id="step-password" class="step-container">
+                <p class="instruction">Password has been sent. Enter to unlock.</p>
+                <form id="password-form">
+                    <input type="password" id="password-input" placeholder="PASSWORD" required>
+                    <button type="submit" class="btn">ENTER</button>
+                </form>
+                <p id="error-msg" class="error-msg">Incorrect Password.</p>
+                <p class="hint">Hint: try "MINE2026"</p>
+            </div>
+        </div>
+        <div class="noise-overlay"></div>
+    </div>
+
+    <!-- MAIN CONTENT: E-Commerce Store -->
+    <div id="main-content" class="hidden">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-left">
+                <div class="nav-item-dropdown">
+                    <a href="#">SHOP</a>
+                    <div class="dropdown-content">
+                        <span class="cat-item" data-filter="all">ALL</span>
+                        <span class="cat-item" data-filter="new">NEW</span>
+                        <span class="cat-item" data-filter="jackets">JACKETS</span>
+                        <span class="cat-item" data-filter="shirting">SHIRTING</span>
+                        <span class="cat-item" data-filter="tops">TOPS</span>
+                        <span class="cat-item" data-filter="bottoms">BOTTOMS</span>
+                        <span class="cat-item" data-filter="shorts">SHORTS</span>
+                        <span class="cat-item" data-filter="tracksuits">TRACKSUITS</span>
+                        <span class="cat-item" data-filter="hoods">HOODS</span>
+                        <span class="cat-item" data-filter="sweatshirts">SWEATSHIRTS</span>
+                        <span class="cat-item" data-filter="t-shirts">T-SHIRTS</span>
+                        <span class="cat-item" data-filter="hats">HATS</span>
+                        <span class="cat-item" data-filter="underwear">UNDERWEAR</span>
+                        <span class="cat-item" data-filter="footwear">FOOTWEAR</span>
+                        <span class="cat-item" data-filter="bags">BAGS</span>
+                        <span class="cat-item" data-filter="accessories">ACCESSORIES</span>
+                        <span class="cat-item" data-filter="hardware">HARDWARE</span>
+                    </div>
+                </div>
+                <a href="#">ARCHIVE</a>
+            </div>
+            <div class="nav-center">
+                <h1 class="brand-logo-small">MINE</h1>
+            </div>
+            <div class="nav-right">
+                <a href="#">ACCOUNT</a>
+                <a href="#" id="cart-nav-btn">CART (0)</a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <header class="hero">
+            <div class="hero-image-container">
+                <img src="images/hero.jpg" alt="MINE New Collection" class="hero-img">
+            </div>
+            <div class="hero-text">
+                <h2>SEASON 1</h2>
+                <p>THE NEW UNIFORM.</p>
+                <button class="btn btn-large" onclick="document.getElementById('collection').scrollIntoView({behavior: 'smooth'})">EXPLORE COLLECTION</button>
+            </div>
+        </header>
+
+        <!-- Product Collection -->
+        <section id="collection" class="collection-section">
+            <h3 class="section-title">LATEST DROPS</h3>
+            
+            <div class="category-nav">
+                <ul id="category-list">
+                    <li class="cat-item active" data-filter="all">ALL</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="new">NEW</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="jackets">JACKETS</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="shirting">SHIRTING</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="tops">TOPS</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="bottoms">BOTTOMS</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="shorts">SHORTS</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="tracksuits">TRACKSUITS</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="hoods">HOODS</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="sweatshirts">SWEATSHIRTS</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="t-shirts">T-SHIRTS</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="hats">HATS</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="underwear">UNDERWEAR</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="footwear">FOOTWEAR</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="bags">BAGS</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="accessories">ACCESSORIES</li><li class="sep">&bull;</li>
+                    <li class="cat-item" data-filter="hardware">HARDWARE</li>
+                </ul>
+            </div>
+
+            <div class="product-grid" id="product-grid">
+                <!-- Products will be loaded dynamically by app.js -->
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <h1 class="brand-logo-large">MINE</h1>
+            <div class="footer-links">
+                <a href="#">INSTAGRAM</a>
+                <a href="#">TWITTER</a>
+                <a href="#">TERMS</a>
+                <a href="#">CONTACT</a>
+            </div>
+            <p class="copyright">© 2026 MINE STUDIOS. ALL RIGHTS RESERVED.</p>
+        </footer>
+
+        <!-- Cart Drawer overlay & container -->
+        <div id="cart-overlay" class="cart-overlay"></div>
+        <div id="cart-drawer" class="cart-drawer">
+            <div class="cart-header">
+                <h2>YOUR CART</h2>
+                <button id="close-cart" class="close-cart-btn">&times;</button>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <!-- Cart items will be rendered here by JS -->
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>TOTAL</span>
+                    <span id="cart-total-price">$0</span>
+                </div>
+                <button class="btn btn-checkout" id="btn-checkout">CHECKOUT</button>
+            </div>
+        </div>
+
+        <!-- Checkout Modal -->
+        <div id="checkout-modal" class="checkout-modal hidden">
+            <div class="checkout-content">
+                <button id="close-checkout" class="close-checkout-btn">&times;</button>
+                <h2>SECURE CHECKOUT</h2>
+                
+                <!-- Step 1: Address -->
+                <div id="checkout-step-1" class="checkout-step active">
+                    <h3>SHIPPING ADDRESS</h3>
+                    <form id="address-form">
+                        <input type="text" placeholder="Full Name" required>
+                        <input type="text" placeholder="Province (e.g. DKI Jakarta)" id="prov-input" required>
+                        <input type="text" placeholder="City (e.g. Jakarta Selatan)" required>
+                        <input type="text" placeholder="Full Address" required>
+                        <button type="submit" class="btn checkout-next-btn">CALCULATE SHIPPING</button>
+                    </form>
+                </div>
+
+                <!-- Step 2: Shipping & Payment -->
+                <div id="checkout-step-2" class="checkout-step">
+                    <h3>SHIPPING METHOD</h3>
+                    <div class="shipping-box" id="shipping-box">
+                        <p class="loading-text">Calculating J&T Express cost based on weight (<span id="total-weight-display"></span>g)...</p>
+                    </div>
+
+                    <h3 class="mt-4">PAYMENT METHOD</h3>
+                    <div class="payment-grid">
+                        <button class="pay-btn" data-method="QRIS">QRIS</button>
+                        <button class="pay-btn" data-method="ShopeePay">ShopeePay</button>
+                        <button class="pay-btn" data-method="BCA">BCA VA</button>
+                        <button class="pay-btn" data-method="BNI">BNI VA</button>
+                        <button class="pay-btn" data-method="BRI">BRI VA</button>
+                    </div>
+
+                    <div class="checkout-grand-total">
+                        <span>GRAND TOTAL</span>
+                        <span id="grand-total-price"></span>
+                    </div>
+                </div>
+
+                <!-- Step 3: Payment Instruction -->
+                <div id="checkout-step-3" class="checkout-step">
+                    <h3>PAYMENT INSTRUCTION</h3>
+                    <div id="payment-instruction-box" class="payment-instruction-box">
+                        <!-- Filled by JS -->
+                    </div>
+                    <button class="btn checkout-next-btn mt-4" id="btn-finish-order">FINISH & SIMULATE EMAIL</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Email Modal (Mockup) -->
+        <div id="email-modal" class="checkout-modal hidden">
+            <div class="email-app-container">
+                <div class="email-header">
+                    <div class="email-actions">
+                        <span class="dot red" id="close-email"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <div class="email-subject">Subject: Your MINE Order Confirmation</div>
+                </div>
+                
+                <div class="email-body">
+                    <div class="email-meta">
+                        <img src="https://ui-avatars.com/api/?name=MINE&background=0D8ABC&color=fff&rounded=true" alt="MINE Logo" class="email-avatar">
+                        <div class="email-sender">
+                            <strong>MINE STUDIOS</strong> &lt;no-reply@minestudios.com&gt;<br>
+                            <span>to me</span>
+                        </div>
+                    </div>
+                    
+                    <div class="email-content">
+                        <h2 style="font-family: 'Anton', sans-serif; font-size: 2.5rem; margin-bottom: 5px;">ORDER CONFIRMED.</h2>
+                        <p style="color: var(--text-secondary); margin-bottom: 30px;">Thank you for your purchase. Your payment has been received successfully.</p>
+                        
+                        <div class="invoice-box">
+                            <div class="invoice-row">
+                                <span class="lbl">ORDER ID:</span>
+                                <span id="email-order-id" style="font-weight: bold;">--</span>
+                            </div>
+                            <div class="invoice-row">
+                                <span class="lbl">STATUS:</span>
+                                <span style="color: #4ade80; font-weight: bold;">PAID</span>
+                            </div>
+                        </div>
+                        
+                        <h4 style="margin: 30px 0 10px; font-family: 'Anton', sans-serif;">ORDER DETAILS</h4>
+                        <div id="email-item-list" class="email-item-list">
+                            <!-- Filled by JS -->
+                        </div>
+                        
+                        <div class="email-totals">
+                            <div class="total-row">
+                                <span>Subtotal:</span>
+                                <span id="email-subtotal">$0</span>
+                            </div>
+                            <div class="total-row">
+                                <span>Shipping (J&T):</span>
+                                <span id="email-shipping">$0</span>
+                            </div>
+                            <div class="total-row grand">
+                                <span>TOTAL PAID:</span>
+                                <span id="email-grandtotal">$0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="shipping-info-box">
+                            <h4 style="font-family: 'Anton', sans-serif;">SHIPPING INFORMATION</h4>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Courier: <strong>J&T Express</strong></p>
+                            <div class="awb-box">
+                                <span>AWB / Resi Number:</span>
+                                <strong id="email-awb" style="font-size: 1.2rem; color: var(--accent);">--</strong>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 10px;">You can track this number on the J&T website within 24 hours.</p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
