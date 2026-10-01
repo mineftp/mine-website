@@ -13,12 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let token = localStorage.getItem('mine_admin_token');
 
-    // --- INIT ---
-    if (token) {
-        showDashboard();
-    }
+    if (token) showDashboard();
 
-    // --- LOGIN ---
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('username').value;
@@ -57,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchProducts();
     }
 
-    // --- PRODUCT MANAGEMENT ---
     async function fetchProducts() {
         try {
             const res = await fetch('/api/products');
@@ -69,19 +64,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderAdminProducts(products) {
+        if(!products || products.length === 0) {
+            adminProductList.innerHTML = '<tr><td colspan="6">Belum ada produk.</td></tr>';
+            return;
+        }
         adminProductList.innerHTML = '';
         products.forEach(p => {
-            const imgSrc = p.img.startsWith('http') ? p.img : `/${p.img}`;
+            const imgSrc = p.img && p.img.startsWith('http') ? p.img : `/${p.img}`;
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td><img src="${imgSrc}" class="admin-img" alt="IMG"></td>
                 <td>${p.name}</td>
-                <td>
-                    $<input type="number" value="${p.price}" id="price-${p.id}" style="width: 60px; background:#222; color:white; border:none; padding:5px;">
-                </td>
-                <td>
-                    <input type="number" value="${p.stock}" id="stock-${p.id}" style="width: 60px; background:#222; color:white; border:none; padding:5px;">
-                </td>
+                <td>$<input type="number" value="${p.price}" id="price-${p.id}" style="width: 60px; background:#222; color:white; border:none; padding:5px;"></td>
+                <td><input type="number" value="${p.stock}" id="stock-${p.id}" style="width: 60px; background:#222; color:white; border:none; padding:5px;"></td>
                 <td>${p.category}</td>
                 <td>
                     <button class="action-btn" onclick="updateProduct('${p.id}')">SAVE</button>
@@ -101,11 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
         productForm.reset();
     });
 
-        productForm.addEventListener('submit', async (e) => {
+    productForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const file = document.getElementById('prod-image').files[0];
-        
         const payload = {
             name: document.getElementById('prod-name').value,
             price: document.getElementById('prod-price').value,
@@ -129,11 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     addProductForm.classList.remove('active');
                     productForm.reset();
                     fetchProducts();
+                    alert("Sukses menambahkan produk!");
                 } else {
-                    alert('Error adding product (Pastikan ukuran file foto tidak lebih dari 5MB)');
+                    const errText = await res.text();
+                    alert('GAGAL: ' + errText);
                 }
             } catch (err) {
-                console.error(err);
+                alert('CRASH: ' + err.message);
             }
         };
 
@@ -163,10 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ price, stock })
             });
             if (res.ok) {
-                alert('Updated successfully');
+                alert('Diperbarui!');
                 fetchProducts();
             } else {
-                alert('Update failed (unauthorized?)');
+                alert('Gagal update');
             }
         } catch (err) {
             console.error(err);
@@ -174,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.deleteProduct = async (id) => {
-        if (!confirm('Are you sure you want to delete this product?')) return;
+        if (!confirm('Hapus produk ini?')) return;
         try {
             const res = await fetch(`/api/products/${id}`, {
                 method: 'DELETE',
@@ -183,11 +179,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (res.ok) {
                 fetchProducts();
             } else {
-                alert('Delete failed');
+                alert('Gagal hapus');
             }
         } catch (err) {
             console.error(err);
         }
     };
-
 });
